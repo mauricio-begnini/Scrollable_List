@@ -1,4 +1,4 @@
-package com.example.scrollablelist
+package com.example.scrollablelist.models
 
 import androidx.annotation.DrawableRes
 
