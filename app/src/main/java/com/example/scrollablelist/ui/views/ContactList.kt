@@ -26,17 +26,31 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.scrollablelist.R
 import com.example.scrollablelist.models.Contact
 import com.example.scrollablelist.ui.theme.ScrollableListTheme
 import com.example.scrollablelist.viewmodel.ContactListViewModel
 
 @Composable
-fun ContactList(viewModel: ContactListViewModel, modifier: Modifier = Modifier) {
-    val uiState by viewModel.uiState.collectAsState()
+fun ContactList(
+    viewModel: ContactListViewModel,
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
+    val uiState by viewModel.contactListUiState.collectAsState()
     LazyColumn {
         items(uiState.contactList) { contact ->
-            ContactCard(contact = contact, onDelete = viewModel::deleteContact)
+            ContactCard(
+                contact = contact,
+                onDelete = viewModel::deleteContact,
+                onEditContact = {
+                    viewModel.updateContact(
+                        contact = contact,
+                        navController = navController
+                    )
+                })
         }
     }
 }
@@ -45,12 +59,16 @@ fun ContactList(viewModel: ContactListViewModel, modifier: Modifier = Modifier) 
 fun ContactCard(
     contact: Contact,
     onDelete: (Contact) -> Unit,
+    onEditContact: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier
             .padding(2.dp)
             .fillMaxWidth()
+            .clickable {
+                onEditContact()
+            }
     )
     {
         Row(
@@ -92,7 +110,7 @@ fun ContactCard(
 @Composable
 fun CardPreview() {
     ScrollableListTheme {
-        ContactList(viewModel())
+        ContactList(viewModel(), navController = rememberNavController())
     }
 }
 
@@ -106,7 +124,7 @@ fun ListPreview() {
                 "Albus Dumbledore",
                 "Happiness can be found, even in the darkest of times."
             ),
-            {}
+            {}, {}
         )
     }
 }

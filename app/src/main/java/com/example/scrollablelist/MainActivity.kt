@@ -34,6 +34,7 @@ import com.example.scrollablelist.data.createContactsList
 import com.example.scrollablelist.models.Contact
 import com.example.scrollablelist.ui.theme.ScrollableListTheme
 import com.example.scrollablelist.ui.views.ContactList
+import com.example.scrollablelist.ui.views.MainScreen
 import com.example.scrollablelist.viewmodel.ContactListViewModel
 
 class MainActivity : ComponentActivity() {
@@ -46,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    App()
+                    MainScreen()
                 }
             }
         }
@@ -55,9 +56,4 @@ class MainActivity : ComponentActivity() {
 
 
 
-@Composable
-fun App() {
-    val viewModel: ContactListViewModel = viewModel()
-    ContactList(viewModel = viewModel)
-}
 
